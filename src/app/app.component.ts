@@ -1,5 +1,6 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
-import * as THREE from 'three';
+
+declare let THREE;
 
 @Component({
     selector: 'app-root',
@@ -12,19 +13,29 @@ export class AppComponent {
     renderer = new THREE.WebGLRenderer();
     scene = null;
     camera = null;
-    mesh = null;
+    ship = null;
 
     constructor() {
         this.scene = new THREE.Scene();
 
-        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+        this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.01, 1e10);
         this.camera.position.z = 1000;
+        this.camera.position.y = 2;
 
-        const geometry = new THREE.BoxGeometry(200, 200, 200);
-        const material = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true});
-        this.mesh = new THREE.Mesh(geometry, material);
+        this.scene.add(this.camera);
 
-        this.scene.add(this.mesh);
+        // Add light
+        const dirLight = new THREE.DirectionalLight(0xffffff);
+        dirLight.position.set(200, 200, 1000).normalize();
+        this.camera.add(dirLight);
+        this.camera.add(dirLight.target);
+
+        // Load ship
+        const loader = new THREE.VRMLLoader(); // FIXME: Need VRMLLoader in type definition
+        loader.load( 'assets/models/Blang.wrl', (object) => {
+            this.ship = object;
+            this.scene.add( object );
+        });
     }
 
     ngAfterViewInit() {
@@ -35,8 +46,8 @@ export class AppComponent {
 
     animate() {
         window.requestAnimationFrame(() => this.animate());
-        this.mesh.rotation.x += 0.01;
-        this.mesh.rotation.y += 0.02;
+        this.ship.rotation.x += 0.01;
+        this.ship.rotation.y += 0.02;
         this.renderer.render(this.scene, this.camera);
     }
 }
