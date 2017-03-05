@@ -5,10 +5,12 @@ import {HttpModule} from '@angular/http'
 
 import {AppComponent} from './app.component'
 import {GeneratorService} from "./generator.service";
+import { MainCanvasComponent } from './main-canvas/main-canvas.component';
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        MainCanvasComponent
     ],
     imports: [
         BrowserModule,
