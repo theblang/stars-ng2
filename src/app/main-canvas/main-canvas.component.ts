@@ -33,8 +33,10 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
         this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 20000)
         this.scene.add(this.camera)
 
-        // // Load ship
-        // const loader = new THREE.VRMLLoader() // FIXME: Need VRMLLoader in type definition
+        // Load ship
+        // (<any>window).THREE lets us make use of the extensions added to window
+        // See http://stackoverflow.com/a/30740935/1747491
+        // const loader = new (<any>window).THREE.VRMLLoader()
         // loader.load( 'assets/models/Blang.wrl', (object) => {
         //     this.ship = object
         //     this.scene.add(object)
