@@ -55,9 +55,9 @@ export class GeneratorService {
                 // Generate random position on the orbit
                 // See http://math.stackexchange.com/a/253113/52104
                 const planetAngle = Math.random() * Math.PI * 2
-                const planetX = Math.cos(planetAngle)
+                const planetX = Math.cos(planetAngle) * planetDistanceFromSun
                 const planetY = 0
-                const planetZ = Math.sin(planetAngle)
+                const planetZ = Math.sin(planetAngle) * planetDistanceFromSun
                 const planetCoords = new Coords(planetX, planetY, planetZ)
 
                 // Generate random radius
