@@ -1,9 +1,10 @@
 import {System} from "../../models/system.model"
-import * as THREE from "three"
+
+declare const THREE: any
 
 export class SystemView {
-    constructor(private scene: THREE.Scene,
-                private camera: THREE.Camera,
+    constructor(private scene,
+                private camera,
                 private system: System) {
     }
 

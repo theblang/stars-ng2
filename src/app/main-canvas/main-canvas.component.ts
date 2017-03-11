@@ -2,7 +2,9 @@ import {Component, OnInit, ViewChild, ElementRef, AfterViewInit} from '@angular/
 import {GeneratorService} from "../generator.service"
 import {Galaxy} from "../models/galaxy.model"
 import {SystemView} from "./views/system.view"
-import * as THREE from 'three'
+
+declare const THREE: any
+declare const Stats: any
 
 @Component({
   selector: 'app-main-canvas',
@@ -12,17 +14,23 @@ import * as THREE from 'three'
 export class MainCanvasComponent implements OnInit, AfterViewInit {
     @ViewChild('rendererContainer') rendererContainer: ElementRef
 
-    scene: THREE.Scene = null
-    renderer: THREE.Renderer = new THREE.WebGLRenderer({antialias: true})
-    camera: THREE.Camera = null
+    stats = null
+    scene = null
+    renderer = null
+    camera = null
+    controls = null
     galaxy: Galaxy = null
     systemView: SystemView = null
     ship = null
 
     constructor(private generatorService: GeneratorService) {
+        this.renderer = new THREE.WebGLRenderer({antialias: true})
     }
 
     ngOnInit() {
+        this.stats = new Stats()
+        this.renderer = new THREE.WebGLRenderer({antialias: true})
+
         // Create galaxy
         this.galaxy = this.generatorService.generateGalaxy()
 
@@ -48,9 +56,22 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
+        const containerElem = this.rendererContainer.nativeElement
+
+        // Setup Stats widget
+        this.stats.domElement.cssText = 'position:fixed;cursor:pointer;opacity:0.9;z-index:10000'
+        this.stats.domElement.style.top = null
+        this.stats.domElement.style.left = null
+        this.stats.domElement.style.right = 0
+        this.stats.domElement.style.bottom = 0
+        containerElem.appendChild(this.stats.domElement)
+
         // Setup renderer
         this.renderer.setSize(window.innerWidth, window.innerHeight)
-        this.rendererContainer.nativeElement.appendChild(this.renderer.domElement)
+        const canvasElem = containerElem.appendChild(this.renderer.domElement)
+
+        // Create controls
+        this.controls = new (<any>window).THREE.OrbitControls(this.camera, canvasElem)
 
         // Begin animation loop
         this.animate()
@@ -65,5 +86,7 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
         // }
 
         this.renderer.render(this.scene, this.camera)
+        this.controls.update()
+        this.stats.update()
     }
 }
