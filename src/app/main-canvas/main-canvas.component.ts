@@ -5,6 +5,7 @@ import {SystemView} from "./views/system.view"
 
 declare const THREE: any
 declare const Stats: any
+declare const TWEEN: any
 
 @Component({
   selector: 'app-main-canvas',
@@ -20,7 +21,7 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
     camera = null
     controls = null
     galaxy: Galaxy = null
-    systemView: SystemView = null
+    activeView = null
     ship = null
 
     constructor(private generatorService: GeneratorService) {
@@ -49,10 +50,6 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
         //     this.ship = object
         //     this.scene.add(object)
         // })
-
-        // Initialize the game view to the first system for now
-        this.systemView = new SystemView(this.scene, this.camera, this.galaxy.systems[0])
-        this.systemView.setup()
     }
 
     ngAfterViewInit() {
@@ -73,6 +70,10 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
         // Create controls
         this.controls = new (<any>window).THREE.OrbitControls(this.camera, canvasElem)
 
+        // Initialize the game view to the first system for now
+        const systemView = new SystemView(this.scene, this.camera, this.controls, this.galaxy.systems[0])
+        this.activeView = systemView
+
         // Begin animation loop
         this.animate()
     }
@@ -88,5 +89,10 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
         this.renderer.render(this.scene, this.camera)
         this.controls.update()
         this.stats.update()
+        TWEEN.update()
+    }
+
+    onDblClick(event) {
+        this.activeView.handleDblClick(event)
     }
 }

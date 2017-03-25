@@ -24,6 +24,7 @@
     "rxjs": "^5.1.0",
     "stats.js": "^0.17.0",
     "three": "^0.84.0",
+    "tween.js": "^16.6.0",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
