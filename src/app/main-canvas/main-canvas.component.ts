@@ -1,32 +1,33 @@
-import {Component, OnInit, ViewChild, ElementRef, AfterViewInit} from '@angular/core'
-import {GeneratorService} from "../generator.service"
-import {Galaxy} from "../models/galaxy.model"
-import {SystemView} from "./views/system.view"
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core'
+import { GeneratorService } from '../generator.service'
+import { Galaxy } from '../models/galaxy.model'
+import { SystemView } from './system.view'
+import { InterfaceService } from '../interfaces/interface.service'
+import { Focusable } from '../models/focusable.interface'
 
 declare const THREE: any
 declare const Stats: any
 declare const TWEEN: any
 
 @Component({
-  selector: 'app-main-canvas',
-  templateUrl: './main-canvas.component.html',
-  styleUrls: ['./main-canvas.component.css']
+    selector: 'app-main-canvas',
+    templateUrl: './main-canvas.component.html',
+    styleUrls: ['./main-canvas.component.css']
 })
 export class MainCanvasComponent implements OnInit, AfterViewInit {
     @ViewChild('rendererContainer') rendererContainer: ElementRef
 
-    stats = null
-    scene = null
-    renderer = null
-    camera = null
-    controls = null
-    galaxy: Galaxy = null
-    activeView = null
-    ship = null
+    private stats
+    private scene: THREE.Scene
+    private renderer: THREE.Renderer
+    private camera: THREE.Camera
+    private controls: THREE.OrbitControls
+    private galaxy: Galaxy
+    private activeView
+    private ship
 
-    constructor(private generatorService: GeneratorService) {
-        this.renderer = new THREE.WebGLRenderer({antialias: true})
-    }
+    constructor(private generatorService: GeneratorService,
+                private interfaceService: InterfaceService) { }
 
     ngOnInit() {
         this.stats = new Stats()
@@ -93,6 +94,9 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
     }
 
     onDblClick(event) {
-        this.activeView.handleDblClick(event)
+        const focusedObject: Focusable = this.activeView.onDblClick(event)
+        if(this.activeView.onDblClick(event)) {
+            this.interfaceService.setInfo(focusedObject.getInterfaceInfo())
+        }
     }
 }
