@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core'
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, HostListener } from '@angular/core'
 import { GeneratorService } from '../generator.service'
 import { Galaxy } from '../models/galaxy.model'
 import { SystemView } from './system.view'
@@ -91,6 +91,12 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
         this.controls.update()
         this.stats.update()
         TWEEN.update()
+    }
+
+    // See http://stackoverflow.com/a/20434960/1747491 and http://stackoverflow.com/a/35527852/1747491
+    @HostListener('window:resize', ['$event'])
+    onWindowResize(event) {
+        this.renderer.setSize(event.target.innerWidth, event.target.innerHeight)
     }
 
     onDblClick(event) {
