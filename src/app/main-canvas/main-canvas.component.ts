@@ -17,12 +17,12 @@ declare const TWEEN: any
 export class MainCanvasComponent implements OnInit, AfterViewInit {
     @ViewChild('rendererContainer') rendererContainer: ElementRef
 
-    private stats
     private scene: THREE.Scene
     private renderer: THREE.Renderer
     private camera: THREE.Camera
     private controls: THREE.OrbitControls
     private galaxy: Galaxy
+    private stats
     private activeView
     private ship
 

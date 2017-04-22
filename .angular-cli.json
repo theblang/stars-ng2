@@ -22,11 +22,11 @@
         "styles.css"
       ],
       "scripts": [
-          "../node_modules/tween.js/src/Tween.js",
-          "../node_modules/three/build/three.js",
-          "../node_modules/stats.js/build/stats.min.js",
-          "../vendor/VRMLLoader.js",
-          "../vendor/OrbitControls.js"
+        "../node_modules/tween.js/src/Tween.js",
+        "../node_modules/three/build/three.js",
+        "../node_modules/stats.js/build/stats.min.js",
+        "../vendor/VRMLLoader.js",
+        "../vendor/OrbitControls.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
@@ -58,6 +58,8 @@
   },
   "defaults": {
     "styleExt": "css",
-    "component": {}
-  }
+    "component": {
+    }
+  },
+  "packageManager": "yarn"
 }
