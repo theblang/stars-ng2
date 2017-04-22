@@ -24,7 +24,6 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
     private galaxy: Galaxy
     private stats
     private activeView
-    private ship
 
     constructor(private generatorService: GeneratorService,
                 private interfaceService: InterfaceService) { }
@@ -44,13 +43,33 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
         this.scene.add(this.camera)
 
         // Load ship
-        // (<any>window).THREE lets us make use of the extensions added to window
-        // See http://stackoverflow.com/a/30740935/1747491
-        // const loader = new (<any>window).THREE.VRMLLoader()
-        // loader.load( 'assets/models/Blang.wrl', (object) => {
-        //     this.ship = object
-        //     this.scene.add(object)
-        // })
+        const loader = new THREE.VRMLLoader()
+        loader.load( 'assets/models/Blang.wrl', (scene: THREE.Scene) => {
+            if(!scene.children || scene.children.length <= 0) {
+                throw 'Could not load VRML model';
+            }
+
+            // Get the ship object from the parsed scene
+            const ship: THREE.Object3D = scene.children[0];
+
+            // Turn the ship into a non-shaded mesh
+            const shipMesh: THREE.Mesh = <THREE.Mesh> ship.children[0]
+            shipMesh.material = new THREE.MeshBasicMaterial({
+                color: 0xEBEBEB,
+                polygonOffset: true,
+                polygonOffsetFactor: 1,
+                polygonOffsetUnits: 1
+            })
+
+            // Add a wireframe
+            const wireframeGeometry = new THREE.EdgesGeometry(shipMesh.geometry)
+            const wireframeMaterial = new THREE.LineBasicMaterial({ color: 0x5A5A5A, linewidth: 2 })
+            const wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial)
+            shipMesh.add(wireframe)
+
+            ship.position.set(0, 500, 0)
+            this.scene.add(ship)
+        })
     }
 
     ngAfterViewInit() {
