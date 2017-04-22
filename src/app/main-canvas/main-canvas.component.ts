@@ -95,8 +95,11 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
 
     onDblClick(event) {
         const focusedObject: Focusable = this.activeView.onDblClick(event)
-        if(this.activeView.onDblClick(event)) {
-            this.interfaceService.setInfo(focusedObject.getInterfaceInfo())
+        if(focusedObject) {
+            this.interfaceService.setState(focusedObject.getInterfaceState())
+        }
+        else {
+            this.interfaceService.setState({})
         }
     }
 }

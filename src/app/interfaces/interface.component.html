@@ -4,3 +4,58 @@
     {{interfaceState.info.name}}
 </div>
 
+<div id="climate" *ngIf="interfaceState.climate">
+    <md-grid-list cols="2" rowHeight="50px">
+        <md-grid-tile [colspan]="1" [rowspan]="1">
+            <span>Gravity</span>
+        </md-grid-tile>
+        <md-grid-tile [colspan]="1" [rowspan]="1">
+            <md-slider
+                [value]="interfaceState.climate.gravity"
+                [disabled]="false"
+                [invert]="false"
+                [max]="100"
+                [min]="0"
+                [step]="1"
+                [thumb-label]="false"
+                [tick-interval]="null"
+                [vertical]="false">
+            </md-slider>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="1" [rowspan]="1">
+            <span>Temperature</span>
+        </md-grid-tile>
+        <md-grid-tile [colspan]="1" [rowspan]="1">
+            <md-slider
+                [value]="interfaceState.climate.temperature"
+                [disabled]="false"
+                [invert]="false"
+                [max]="100"
+                [min]="0"
+                [step]="1"
+                [thumb-label]="false"
+                [tick-interval]="null"
+                [vertical]="false">
+            </md-slider>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="1" [rowspan]="1">
+            <span>Radiation</span>
+        </md-grid-tile>
+        <md-grid-tile [colspan]="1" [rowspan]="1">
+            <md-slider
+                [value]="interfaceState.climate.radiation"
+                [disabled]="false"
+                [invert]="false"
+                [max]="100"
+                [min]="0"
+                [step]="1"
+                [thumb-label]="false"
+                [tick-interval]="null"
+                [vertical]="false">
+            </md-slider>
+        </md-grid-tile>
+    </md-grid-list>
+</div>
+

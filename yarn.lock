@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@angular/animations@~4.0.3":
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-4.0.3.tgz#42bb7d0c767137aaca777d27244f4c042d02641b"
+
 "@angular/cli@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@angular/cli/-/cli-1.0.0.tgz#7bfde1e7c5f28bf5bed4dda1352ee67ee887302f"
@@ -66,11 +70,11 @@
   optionalDependencies:
     node-sass "^4.3.0"
 
-"@angular/common@~4.0.0":
+"@angular/common@~4.0.3":
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/@angular/common/-/common-4.0.3.tgz#17472895eb425f2812b3a79162b5b494d2506a5b"
 
-"@angular/compiler-cli@~4.0.0":
+"@angular/compiler-cli@~4.0.3":
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/@angular/compiler-cli/-/compiler-cli-4.0.3.tgz#691f280bc4d6611a88d6555f43e57032a0d34300"
   dependencies:
@@ -78,31 +82,35 @@
     minimist "^1.2.0"
     reflect-metadata "^0.1.2"
 
-"@angular/compiler@~4.0.0":
+"@angular/compiler@~4.0.3":
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-4.0.3.tgz#8b3cad338ac539328e10a6a4bfaa057094f7bc89"
 
-"@angular/core@~4.0.0":
+"@angular/core@~4.0.3":
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/@angular/core/-/core-4.0.3.tgz#61be21db6aa5778e33159ffd38cbbebaf16120d9"
 
-"@angular/forms@~4.0.0":
+"@angular/forms@~4.0.3":
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-4.0.3.tgz#fb8e6e0aede782bf58730a31d1179b323271816e"
 
-"@angular/http@~4.0.0":
+"@angular/http@~4.0.3":
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/@angular/http/-/http-4.0.3.tgz#efbb701a215ec7704c021676484b85ed47392f4b"
 
-"@angular/platform-browser-dynamic@~4.0.0":
+"@angular/material@~2.0.0-beta.3":
+  version "2.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-2.0.0-beta.3.tgz#ec31dee61d7300ece28fee476852db236ded1e13"
+
+"@angular/platform-browser-dynamic@~4.0.3":
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-4.0.3.tgz#5fa3b98f725999b631d7d7174e6e43dcbf6aa9ac"
 
-"@angular/platform-browser@~4.0.0":
+"@angular/platform-browser@~4.0.3":
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-4.0.3.tgz#170b18d5af4ee02b248aa6a1f1e0584ac841681e"
 
-"@angular/router@~4.0.0":
+"@angular/router@~4.0.3":
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/@angular/router/-/router-4.0.3.tgz#24184e9b1266c4ad017b2be81573464b1e4c5dfa"
 
@@ -1219,7 +1227,13 @@ date-now@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
 
-debug@*, debug@2, debug@2.6.3, debug@^2.2.0:
+debug@*, debug@2.6.1, debug@^2.1.3, debug@^2.2.0:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.1.tgz#79855090ba2c4e3115cc7d8769491d58f0491351"
+  dependencies:
+    ms "0.7.2"
+
+debug@2, debug@2.6.3:
   version "2.6.3"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.3.tgz#0f7eb8c30965ec08c72accfa0130c8b79984141d"
   dependencies:
@@ -1234,12 +1248,6 @@ debug@2.2.0, debug@~2.2.0:
 debug@2.3.3:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.3.3.tgz#40c453e67e6e13c901ddec317af8986cda9eff8c"
-  dependencies:
-    ms "0.7.2"
-
-debug@2.6.1, debug@^2.1.3:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.1.tgz#79855090ba2c4e3115cc7d8769491d58f0491351"
   dependencies:
     ms "0.7.2"
 
@@ -1954,6 +1962,10 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
 "graceful-readlink@>= 1.0.0":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
+
+hammerjs@~2.0.8:
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/hammerjs/-/hammerjs-2.0.8.tgz#04ef77862cff2bb79d30f7692095930222bf60f1"
 
 handle-thing@^1.2.4:
   version "1.2.5"
@@ -5104,16 +5116,9 @@ write-file-atomic@^1.1.2:
     imurmurhash "^0.1.4"
     slide "^1.1.5"
 
-ws@1.1.1:
+ws@1.1.1, ws@^1.0.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ws/-/ws-1.1.1.tgz#082ddb6c641e85d4bb451f03d52f06eabdb1f018"
-  dependencies:
-    options ">=0.0.5"
-    ultron "1.0.x"
-
-ws@^1.0.1:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-1.1.4.tgz#57f40d036832e5f5055662a397c4de76ed66bf61"
   dependencies:
     options ">=0.0.5"
     ultron "1.0.x"
@@ -5237,10 +5242,10 @@ yn@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/yn/-/yn-1.2.0.tgz#d237a4c533f279b2b89d3acac2db4b8c795e4a63"
 
+zone.js@0.8.5:
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/zone.js/-/zone.js-0.8.5.tgz#7906e017482cbff4c3f079c5c34305ce941f5ba2"
+
 zone.js@^0.7.2:
   version "0.7.8"
   resolved "https://registry.yarnpkg.com/zone.js/-/zone.js-0.7.8.tgz#4f3fe8834d44597f2639053a0fa438df34fffded"
-
-zone.js@~0.8.4:
-  version "0.8.8"
-  resolved "https://registry.yarnpkg.com/zone.js/-/zone.js-0.8.8.tgz#354f02bb7241af834bb83b310308a89ad012d3af"

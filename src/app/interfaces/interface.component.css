@@ -10,3 +10,11 @@
     position: absolute;
     color: white;
 }
+
+#climate {
+    bottom: 10px;
+    left: 10px;
+    position: absolute;
+    color: white;
+    width: 300px;
+}

@@ -4,17 +4,18 @@ import { EventEmitter, Injectable } from '@angular/core'
 export class InterfaceService {
     public interfaceUpdated: EventEmitter<any> = new EventEmitter()
     private state = {
-        info: {}
+        info: {},
+        climate: {}
     }
 
     constructor() { }
 
-    setInfo(info) {
-        this.state.info = info
+    setState(state) {
+        this.state = state
         this.interfaceUpdated.emit(this.state)
     }
 
-    getInfo() {
-        return this.state.info
+    getState() {
+        return this.state
     }
 }

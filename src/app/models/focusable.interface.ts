@@ -1,3 +1,3 @@
 export interface Focusable {
-    getInterfaceInfo()
+    getInterfaceState()
 }

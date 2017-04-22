@@ -10,10 +10,18 @@ export class Planet implements Focusable {
                 public distanceFromSun: number,
                 public moons: Moon[]) {}
 
-    public getInterfaceInfo() {
+    public getInterfaceState() {
         return {
-            name: this.name,
-            description: `This is planet ${this.name}. It is ${this.radius * 2} big and ${this.distanceFromSun} distance from the sun`
+            info: {
+                name: this.name,
+                description: `This is planet ${this.name}. It is ${this.radius * 2} big and ${this.distanceFromSun} distance from the sun`
+            },
+            // FIXME: Do actual random generation in GeneratorService
+            climate: {
+                gravity: Math.floor(Math.random() * 101),
+                temperature: Math.floor(Math.random() * 101),
+                radiation: Math.floor(Math.random() * 101)
+            }
         }
     }
 }
