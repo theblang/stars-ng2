@@ -16,7 +16,7 @@ export class SystemView {
         this.draw()
     }
 
-    public onDblClick(event: MouseEvent): Focusable {
+    public onDblClick(event: MouseEvent): ExtendedMesh {
         const vector = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1, 0.5)
         this.raycaster.setFromCamera(vector, this.camera) // http://stackoverflow.com/a/29373404/1747491
 
@@ -31,13 +31,7 @@ export class SystemView {
             const AB = new THREE.Vector3((B.x - A.x), (B.y - A.y), (B.z - A.z))
             AB.normalize()
 
-            new TWEEN.Tween(this.controls.target).to({
-                x: intersectedMesh.position.x,
-                y: intersectedMesh.position.y,
-                z: intersectedMesh.position.z
-            }, 500).start()
-
-            return intersectedMesh.object
+            return intersectedMesh
         }
         else {
             return null

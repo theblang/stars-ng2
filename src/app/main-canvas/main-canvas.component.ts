@@ -4,6 +4,7 @@ import { Galaxy } from '../models/galaxy.model'
 import { SystemView } from './system.view'
 import { InterfaceService } from '../interfaces/interface.service'
 import { Focusable } from '../models/focusable.interface'
+import { ExtendedMesh } from '../models/extended-mesh.model'
 
 declare const THREE: any
 declare const Stats: any
@@ -22,6 +23,7 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
     private camera: THREE.Camera
     private controls: THREE.OrbitControls
     private galaxy: Galaxy
+    private ship: THREE.Object3D
     private stats
     private activeView
 
@@ -44,16 +46,16 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
 
         // Load ship
         const loader = new THREE.VRMLLoader()
-        loader.load( 'assets/models/Blang.wrl', (scene: THREE.Scene) => {
-            if(!scene.children || scene.children.length <= 0) {
-                throw 'Could not load VRML model';
+        loader.load('assets/models/Blang.wrl', (scene: THREE.Scene) => {
+            if (!scene.children || scene.children.length <= 0) {
+                throw 'Could not load VRML model'
             }
 
             // Get the ship object from the parsed scene
-            const ship: THREE.Object3D = scene.children[0];
+            this.ship = THREE.Object3D = scene.children[0]
 
             // Turn the ship into a non-shaded mesh
-            const shipMesh: THREE.Mesh = <THREE.Mesh> ship.children[0]
+            const shipMesh: THREE.Mesh = <THREE.Mesh> this.ship.children[0]
             shipMesh.material = new THREE.MeshBasicMaterial({
                 color: 0xEBEBEB,
                 polygonOffset: true,
@@ -63,12 +65,15 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
 
             // Add a wireframe
             const wireframeGeometry = new THREE.EdgesGeometry(shipMesh.geometry)
-            const wireframeMaterial = new THREE.LineBasicMaterial({ color: 0x5A5A5A, linewidth: 2 })
+            const wireframeMaterial = new THREE.LineBasicMaterial({color: 0x5A5A5A, linewidth: 2})
             const wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial)
             shipMesh.add(wireframe)
 
-            ship.position.set(0, 500, 0)
-            this.scene.add(ship)
+            // FIXME: Hack to fix shapeWright models. Figure out the right way to correct rotation.
+            shipMesh.rotation.y = Math.PI / 2
+
+            this.ship.position.set(0, 500, 0)
+            this.scene.add(this.ship)
         })
     }
 
@@ -88,7 +93,7 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
         const canvasElem = containerElem.appendChild(this.renderer.domElement)
 
         // Create controls
-        this.controls = new (<any>window).THREE.OrbitControls(this.camera, canvasElem)
+        this.controls = new THREE.OrbitControls(this.camera, canvasElem)
 
         // Initialize the game view to the first system for now
         const systemView = new SystemView(this.scene, this.camera, this.controls, this.galaxy.systems[0])
@@ -119,9 +124,59 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
     }
 
     onDblClick(event) {
-        const focusedObject: Focusable = this.activeView.onDblClick(event)
-        if(focusedObject) {
-            this.interfaceService.setState(focusedObject.getInterfaceState())
+        const focusedMesh: ExtendedMesh = this.activeView.onDblClick(event)
+        if (focusedMesh) {
+
+            // Point the camera towards the focused object
+            const pointTween = new TWEEN.Tween(this.controls.target).to({
+                x: focusedMesh.position.x,
+                y: focusedMesh.position.y,
+                z: focusedMesh.position.z
+            }, 750).onComplete(() => {
+                // Zoom the camera towards the object. Note that we are not using chain because we need to know the
+                // position of the camera after the first move.
+                const directionVector = this.camera.getWorldDirection()
+                const newPosition = directionVector.multiplyScalar(this.camera.position.distanceTo(focusedMesh.position) - 2000)
+
+                new TWEEN.Tween(this.camera.position).to({
+                    x: this.camera.position.x + newPosition.x,
+                    y: this.camera.position.y,
+                    z: this.camera.position.z + newPosition.z
+                }, 750).start()
+            })
+
+            pointTween.start()
+
+            if (this.ship) {
+                // Rotate ship towards and move to focused object
+                // See http://stackoverflow.com/a/25278875/1747491
+                // FIXME: Improve the rotation so that it doesn't have the silly "whipping" effect
+
+                // backup original rotation
+                const startRotation = new THREE.Euler().copy(this.ship.rotation)
+
+                // temporarily lookAt
+                this.ship.lookAt(focusedMesh.position)
+                const endRotation = new THREE.Euler().copy(this.ship.rotation)
+
+                // revert to original rotation
+                this.ship.rotation.copy(startRotation)
+
+                // Tween
+                const rotateTween = new TWEEN.Tween(this.ship.rotation).to({x: endRotation.x, y: endRotation.y, z: endRotation.z}, 750).start()
+                const moveTween = new TWEEN.Tween(this.ship.position).to({
+                    x: focusedMesh.position.x,
+                    y: this.ship.position.y,
+                    z: focusedMesh.position.z
+                }, 750)
+
+                rotateTween.chain(moveTween)
+                rotateTween.start()
+            }
+
+            if (focusedMesh.object) {
+                this.interfaceService.setState(focusedMesh.object.getInterfaceState())
+            }
         }
         else {
             this.interfaceService.setState({})
