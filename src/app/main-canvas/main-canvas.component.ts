@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, HostListener } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core'
 import { GeneratorService } from '../generator.service'
 import { Galaxy } from '../models/galaxy.model'
 import { SystemView } from './system.view'
 import { InterfaceService } from '../interfaces/interface.service'
-import { Focusable } from '../models/focusable.interface'
 import { ExtendedMesh } from '../models/extended-mesh.model'
+import { GameStateService } from '../game-state.service'
 
 declare const THREE: any
 declare const Stats: any
@@ -27,15 +27,15 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
     private stats
     private activeView
 
-    constructor(private generatorService: GeneratorService,
-                private interfaceService: InterfaceService) { }
+    constructor(private interfaceService: InterfaceService,
+                private gameStateService: GameStateService) { }
 
     ngOnInit() {
         this.stats = new Stats()
         this.renderer = new THREE.WebGLRenderer({antialias: true})
 
         // Create galaxy
-        this.galaxy = this.generatorService.generateGalaxy()
+        this.galaxy = this.gameStateService.gameState.galaxy
 
         // Create scene
         this.scene = new THREE.Scene()
@@ -95,12 +95,20 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
         // Create controls
         this.controls = new THREE.OrbitControls(this.camera, canvasElem)
 
-        // Initialize the game view to the first system for now
-        const systemView = new SystemView(this.scene, this.camera, this.controls, this.galaxy.systems[0])
-        this.activeView = systemView
-
         // Begin animation loop
         this.animate()
+
+        // Set up game state listener
+        this.gameStateService.gameStateUpdated.subscribe(
+            (gameState) => {
+                if (!gameState || !gameState.galaxy) {
+                    return
+                }
+
+                // Initialize the game view to the first system for now
+                this.activeView = new SystemView(this.scene, this.camera, this.controls, gameState.galaxy.systems[0])
+            }
+        )
     }
 
     animate() {
@@ -163,7 +171,11 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
                 this.ship.rotation.copy(startRotation)
 
                 // Tween
-                const rotateTween = new TWEEN.Tween(this.ship.rotation).to({x: endRotation.x, y: endRotation.y, z: endRotation.z}, 750).start()
+                const rotateTween = new TWEEN.Tween(this.ship.rotation).to({
+                    x: endRotation.x,
+                    y: endRotation.y,
+                    z: endRotation.z
+                }, 750).start()
                 const moveTween = new TWEEN.Tween(this.ship.position).to({
                     x: focusedMesh.position.x,
                     y: this.ship.position.y,
