@@ -1,6 +1,6 @@
 import { browser, element, by } from 'protractor';
 
-export class StarsglPage {
+export class StarsPage {
   navigateTo() {
     return browser.get('/');
   }
