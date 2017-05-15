@@ -1,14 +1,15 @@
-import {Injectable} from '@angular/core';
-import {Coords} from "./models/coords.model";
-import {Moon} from "./models/moon.model";
-import {Planet} from "./models/planet.model";
-import {System} from "./models/system.model";
-import {Galaxy} from "./models/galaxy.model";
+import {Injectable} from '@angular/core'
+import {Coords} from './models/coords.model'
+import {Moon} from './models/moon.model'
+import {Planet} from './models/planet.model'
+import {System} from './models/system.model'
+import {Galaxy} from './models/galaxy.model'
 
 @Injectable()
 export class GeneratorService {
 
-    constructor() {}
+    constructor() {
+    }
 
     generateGalaxy() {
         const numSystemsMin = 3
@@ -82,17 +83,32 @@ export class GeneratorService {
                     // Generate random radius
                     const moonRadius = this.getRandomIntInclusive(0, moonRadiusMax - moonRadiusMin) + moonRadiusMin
 
-                    moons.push(new Moon(moonName, moonCoords, moonRadius, moonDistanceFromPlanet))
+                    moons.push(new Moon({
+                        name: moonName,
+                        coords: moonCoords,
+                        radius: moonRadius,
+                        distanceFromPlanet: moonDistanceFromPlanet
+                    }))
                 }
 
-                planets.push(new Planet(planetName, planetCoords, planetRadius, planetDistanceFromSun, moons))
+                planets.push(new Planet({
+                    name: planetName,
+                    coords: planetCoords,
+                    radius: planetRadius,
+                    distanceFromSun: planetDistanceFromSun,
+                    moons: moons
+                }))
             }
 
-            systems.push(new System(systemName, new Coords(systemX, systemY, systemZ), planets))
+            systems.push(new System({
+                name: systemName,
+                coords: new Coords(systemX, systemY, systemZ),
+                planets: planets
+            }))
         }
 
         const galaxyName = `g${Date.now()}`
-        return new Galaxy(galaxyName, systems)
+        return new Galaxy({name: galaxyName, systems: systems})
     }
 
     getRandomIntInclusive(min = 0, max) {

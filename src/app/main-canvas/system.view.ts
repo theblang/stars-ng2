@@ -1,9 +1,7 @@
-import { System } from '../models/system.model'
-import { ExtendedMesh } from '../models/extended-mesh.model'
-import { Focusable } from '../models/focusable.interface'
+import {System} from '../models/system.model';
+import {ExtendedMesh} from '../models/extended-mesh.model';
 
 declare const THREE: any
-declare const TWEEN: any
 
 export class SystemView {
     private static focusDistance = 150
@@ -11,7 +9,6 @@ export class SystemView {
 
     constructor(private scene: THREE.Scene,
                 private camera: THREE.Camera,
-                private controls: THREE.OrbitControls,
                 private system: System) {
         this.draw()
     }
@@ -32,8 +29,7 @@ export class SystemView {
             AB.normalize()
 
             return intersectedMesh
-        }
-        else {
+        } else {
             return null
         }
     }
@@ -63,7 +59,7 @@ export class SystemView {
         this.scene.add(mesh)
 
         // Draw the planets
-        for (let planet of this.system.planets) {
+        for (const planet of this.system.planets) {
 
             // Planet
             geometry = new THREE.SphereGeometry(planet.radius, 10, 10)
@@ -75,20 +71,22 @@ export class SystemView {
             // Planet's orbit
             geometry = new THREE.Geometry()
             material = new THREE.LineBasicMaterial({color: 0xFFFFFF, opacity: 0.8})
-            let resolution = 100
-            let size = 360 / resolution
+            const resolution = 100
+            const size = 360 / resolution
             let segment = null
             for (let i = 0; i <= resolution; i++) {
                 segment = (i * size) * Math.PI / 180
-                geometry.vertices.push(new THREE.Vector3(Math.cos(segment) * planet.distanceFromSun, 0, Math.sin(segment) * planet.distanceFromSun))
+                geometry.vertices.push(new THREE.Vector3(Math.cos(segment) * planet.distanceFromSun,
+                    0,
+                    Math.sin(segment) * planet.distanceFromSun))
             }
-            let line = new THREE.Line(geometry, material)
+            const line = new THREE.Line(geometry, material)
             this.scene.add(line)
         }
     }
 
     private clear() {
-        for (let child of this.scene.children) {
+        for (const child of this.scene.children) {
             this.scene.remove(child)
         }
     }

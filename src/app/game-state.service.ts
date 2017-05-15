@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core'
 import { AngularFireDatabase } from 'angularfire2/database'
+import {GameState} from './models/game-state'
 
 @Injectable()
 export class GameStateService {
@@ -10,8 +11,8 @@ export class GameStateService {
         this.gameState = {} // FIXME: Can't we set default above in the declaration?
 
         const gameStateObservable = db.object('/game-state')
-        gameStateObservable.subscribe((gameState) => {
-            this.gameState = gameState
+        gameStateObservable.subscribe((gameStateJson) => {
+            this.gameState = new GameState(gameStateJson)
             this.gameStateUpdated.emit(this.gameState)
 
             // FIXME: Just temporary. Move this galaxy generation somewhere else.

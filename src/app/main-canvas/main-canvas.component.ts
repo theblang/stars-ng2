@@ -1,9 +1,9 @@
-import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
-import {Galaxy} from '../models/galaxy.model';
-import {SystemView} from './system.view';
-import {InterfaceService} from '../interfaces/interface.service';
-import {ExtendedMesh} from '../models/extended-mesh.model';
-import {GameStateService} from '../game-state.service';
+import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core'
+import {Galaxy} from '../models/galaxy.model'
+import {SystemView} from './system.view'
+import {InterfaceService} from '../interfaces/interface.service'
+import {ExtendedMesh} from '../models/extended-mesh.model'
+import {GameStateService} from '../game-state.service'
 
 declare const THREE: any
 declare const Stats: any
@@ -44,7 +44,7 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
         const loader = new THREE.VRMLLoader()
         loader.load('assets/models/Blang.wrl', (scene: THREE.Scene) => {
             if (!scene.children || scene.children.length <= 0) {
-                throw 'Could not load VRML model'
+                throw new Error('Could not load VRML model')
             }
 
             // Get the ship object from the parsed scene
@@ -102,7 +102,7 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
                 }
 
                 // Initialize the game view to the first system for now
-                this.activeView = new SystemView(this.scene, this.camera, this.controls, gameState.galaxy.systems[0])
+                this.activeView = new SystemView(this.scene, this.camera, gameState.galaxy.systems[0])
             }
         )
     }
@@ -185,8 +185,7 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
             if (focusedMesh.object) {
                 this.interfaceService.setState(focusedMesh.object.getInterfaceState())
             }
-        }
-        else {
+        } else {
             this.interfaceService.setState({})
         }
     }
