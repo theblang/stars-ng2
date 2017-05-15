@@ -4,10 +4,10 @@
 
 ## Install truffle
 
-1.  Install Python 2.x and add it to PATH
+1.  Install [Python 2.x](https://www.python.org/downloads/) and add it to PATH
     *   Note: truffle will not install with Python 3.x
-    *   Note: On Windows you may get errors about node-gyp. If so try installing [this package](https://github.com/felixrieseberg/windows-build-tools) and / or going to Microsoft Visual Studio, starting a new Visual C++ project, and choosing `Install Visual C++ 2015 Tools for Windows Desktop`.
-2.  `npm install -g truffle`
+    *   Note: On Windows you may get errors about node-gyp. If so try installing [this package](https://github.com/felixrieseberg/windows-build-tools) and / or going to Microsoft Visual Studio, starting a new Visual C++ project, and choosing "Install Visual C++ 2015 Tools for Windows Desktop".
+2.  [Install truffle](https://github.com/trufflesuite/truffle)
 
 ## Install testrpc (local dev blockchain)
 
