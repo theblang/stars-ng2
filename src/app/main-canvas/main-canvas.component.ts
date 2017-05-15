@@ -1,10 +1,9 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core'
-import { GeneratorService } from '../generator.service'
-import { Galaxy } from '../models/galaxy.model'
-import { SystemView } from './system.view'
-import { InterfaceService } from '../interfaces/interface.service'
-import { ExtendedMesh } from '../models/extended-mesh.model'
-import { GameStateService } from '../game-state.service'
+import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
+import {Galaxy} from '../models/galaxy.model';
+import {SystemView} from './system.view';
+import {InterfaceService} from '../interfaces/interface.service';
+import {ExtendedMesh} from '../models/extended-mesh.model';
+import {GameStateService} from '../game-state.service';
 
 declare const THREE: any
 declare const Stats: any
@@ -33,9 +32,6 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.stats = new Stats()
         this.renderer = new THREE.WebGLRenderer({antialias: true})
-
-        // Create galaxy
-        this.galaxy = this.gameStateService.gameState.galaxy
 
         // Create scene
         this.scene = new THREE.Scene()
