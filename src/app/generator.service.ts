@@ -75,10 +75,10 @@ export class GeneratorService {
 
                     // Generate random position on the orbit
                     const moonAngle = Math.random() * Math.PI * 2
-                    const moonX = Math.cos(moonAngle)
+                    const moonX = Math.cos(moonAngle) * moonDistanceFromPlanet
                     const moonY = 0
-                    const moonZ = Math.sin(moonAngle)
-                    const moonCoords = new Coords(moonX, moonY, moonZ)
+                    const moonZ = Math.sin(moonAngle) * moonDistanceFromPlanet
+                    const moonCoords = new Coords(moonX + planetX, moonY + planetY, moonZ + planetZ)
 
                     // Generate random radius
                     const moonRadius = this.getRandomIntInclusive(0, moonRadiusMax - moonRadiusMin) + moonRadiusMin

@@ -1,5 +1,6 @@
-import {System} from '../models/system.model';
-import {ExtendedMesh} from '../models/extended-mesh.model';
+import {System} from '../models/system.model'
+import {ExtendedMesh} from '../models/extended-mesh.model'
+import {Coords} from '../models/coords.model'
 
 declare const THREE: any
 
@@ -69,20 +70,45 @@ export class SystemView {
             this.scene.add(mesh)
 
             // Planet's orbit
-            geometry = new THREE.Geometry()
-            material = new THREE.LineBasicMaterial({color: 0xFFFFFF, opacity: 0.8})
-            const resolution = 100
-            const size = 360 / resolution
-            let segment = null
-            for (let i = 0; i <= resolution; i++) {
-                segment = (i * size) * Math.PI / 180
-                geometry.vertices.push(new THREE.Vector3(Math.cos(segment) * planet.distanceFromSun,
-                    0,
-                    Math.sin(segment) * planet.distanceFromSun))
+            this.scene.add(this.getOrbitLine(planet.distanceFromSun, null))
+
+            for (const moon of planet.moons) {
+
+                // Moon
+                geometry = new THREE.SphereGeometry(moon.radius, 10, 10)
+                material = new THREE.MeshBasicMaterial({color: 0xA9A9A9, wireframe: true})
+                mesh = new ExtendedMesh(geometry, material, moon)
+                mesh.position.set(moon.coords.x, moon.coords.y, moon.coords.z)
+                this.scene.add(mesh)
+
+                // Moon's orbit
+                this.scene.add(this.getOrbitLine(moon.distanceFromPlanet, planet.coords))
             }
-            const line = new THREE.Line(geometry, material)
-            this.scene.add(line)
         }
+    }
+
+    private getOrbitLine(distanceFromCenter: number, centerPosition: Coords) {
+        const geometry = new THREE.Geometry()
+        const material = new THREE.LineBasicMaterial({color: 0xFFFFFF, opacity: 0.8})
+        const resolution = 100
+        const size = 360 / resolution
+        let segment = null
+        for (let i = 0; i <= resolution; i++) {
+            segment = (i * size) * Math.PI / 180
+            geometry.vertices.push(new THREE.Vector3(Math.cos(segment) * distanceFromCenter,
+                0,
+                Math.sin(segment) * distanceFromCenter))
+        }
+
+        const line = new THREE.Line(geometry, material)
+
+        if (centerPosition) {
+            line.translateX(centerPosition.x)
+            line.translateY(centerPosition.y)
+            line.translateZ(centerPosition.z)
+        }
+
+        return line
     }
 
     private clear() {

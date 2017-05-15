@@ -27,7 +27,8 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
     private activeView
 
     constructor(private interfaceService: InterfaceService,
-                private gameStateService: GameStateService) { }
+                private gameStateService: GameStateService) {
+    }
 
     ngOnInit() {
         this.stats = new Stats()
@@ -101,7 +102,13 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
                     return
                 }
 
+                // If we have an active view then clear it
+                if (this.activeView) {
+                    this.activeView.clear()
+                }
+
                 // Initialize the game view to the first system for now
+                // FIXME: Eventually we want to initialize where the player left off. Need to think about that.
                 this.activeView = new SystemView(this.scene, this.camera, gameState.galaxy.systems[0])
             }
         )
