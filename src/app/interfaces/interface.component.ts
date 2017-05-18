@@ -9,7 +9,6 @@ import { InterfaceService } from './interface.service'
 export class InterfaceComponent implements OnInit {
 
     interfaceState = {}
-    showExit = false
 
     constructor(private interfaceService: InterfaceService) { }
 

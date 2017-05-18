@@ -1,4 +1,7 @@
-<button id="exit" *ngIf="showExit" (click)="exitInterface()">Exit</button>
+<div id="views">
+    <button md-raised-button>System</button>
+    <button md-raised-button>Universe</button>
+</div>
 
 <div id="info" *ngIf="interfaceState.info">
     {{interfaceState.info.name}}

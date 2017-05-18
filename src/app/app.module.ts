@@ -7,7 +7,7 @@ import { MainCanvasComponent } from './main-canvas/main-canvas.component'
 import { InterfaceComponent } from './interfaces/interface.component'
 import { InterfaceService } from './interfaces/interface.service'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { MdGridListModule, MdSliderModule } from '@angular/material'
+import { MdButtonModule, MdGridListModule, MdSliderModule } from '@angular/material'
 import 'hammerjs'
 import { BrowserModule } from '@angular/platform-browser'
 import { AngularFireModule } from 'angularfire2'
@@ -28,6 +28,7 @@ import { GameStateService } from './game-state.service'
         HttpModule,
         MdSliderModule,
         MdGridListModule,
+        MdButtonModule,
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireDatabaseModule
     ],
