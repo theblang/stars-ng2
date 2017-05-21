@@ -14,6 +14,7 @@ export class GalaxyView {
                 private camera: THREE.Camera,
                 private galaxy: Galaxy) {
         this.interactive = new Interactive(this.scene, this.camera)
+        this.renderable = new Renderable(this.scene)
         this.draw()
     }
 
@@ -44,17 +45,14 @@ export class GalaxyView {
         const pointLight = new THREE.PointLight(0xFFFFFF)
         pointLight.position.set(0, 0, 0)
         this.scene.add(new THREE.PointLight(0xFFFFFF))
-        // this.scene.add(new THREE.AmbientLight(0x555555))
-
-        // Draw the sun
-        geometry = new THREE.SphereGeometry(100, 10, 10)
-        material = new THREE.MeshBasicMaterial({color: 0xFFCC33, wireframe: true})
-        mesh = new THREE.Mesh(geometry, material)
-        mesh.position.set(0, 0, 0)
-        this.scene.add(mesh)
 
         // Draw the systems
         for (const system of this.galaxy.systems) {
+            geometry = new THREE.TetrahedronGeometry(40, 0);
+            material = new THREE.MeshBasicMaterial({color: 0xFFCC33, wireframe: true});
+            mesh = new THREE.Mesh(geometry, material)
+            mesh.position.set(system.coords.x, system.coords.y, system.coords.z);
+            this.scene.add(mesh)
         }
     }
 }

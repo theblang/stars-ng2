@@ -5,6 +5,7 @@ import { ExtendedMesh } from '../models/extended-mesh.model'
 import { GameStateService } from '../state/game-state.service'
 import { MainInterfaceService } from '../ui/main-interface.service'
 import { PlayerStateService } from '../state/player-state.service'
+import { GalaxyView } from '../canvas-views/galaxy.view'
 
 declare const THREE: any
 declare const Stats: any
@@ -22,7 +23,6 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
     private renderer: THREE.Renderer
     private camera: THREE.Camera
     private controls: THREE.OrbitControls
-    private galaxy: Galaxy
     private shipObject: THREE.Object3D
     private stats
     private activeView
@@ -108,8 +108,8 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
                 if (playerState.activeViewName === 'system') {
                     const activeSystem = this.gameStateService.getState().galaxy.systems[playerState.activeSystemIndex]
                     this.activeView = new SystemView(this.scene, this.camera, activeSystem, this.shipObject)
-                } else if (playerState.activeSystemIndex === 'galaxy') {
-                    // FIXME: Draw galaxy
+                } else if (playerState.activeViewName === 'galaxy') {
+                    this.activeView = new GalaxyView(this.scene, this.camera, this.gameStateService.getState().galaxy)
                 }
             }
         )
