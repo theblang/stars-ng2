@@ -1,5 +1,5 @@
 import {Component, HostListener} from '@angular/core'
-import {GameStateService} from './game-state.service'
+import {GameStateService} from './state/game-state.service'
 
 @Component({
     selector: 'app-root',

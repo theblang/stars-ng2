@@ -1,9 +1,10 @@
-import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core'
-import {Galaxy} from '../models/galaxy.model'
-import {SystemView} from '../canvas-views/system.view'
-import {ExtendedMesh} from '../models/extended-mesh.model'
-import {GameStateService} from '../game-state.service'
-import {MainInterfaceService} from '../ui/main-interface.service'
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core'
+import { Galaxy } from '../models/galaxy.model'
+import { SystemView } from '../canvas-views/system.view'
+import { ExtendedMesh } from '../models/extended-mesh.model'
+import { GameStateService } from '../state/game-state.service'
+import { MainInterfaceService } from '../ui/main-interface.service'
+import { PlayerStateService } from '../state/player-state.service'
 
 declare const THREE: any
 declare const Stats: any
@@ -22,12 +23,13 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
     private camera: THREE.Camera
     private controls: THREE.OrbitControls
     private galaxy: Galaxy
-    private ship: THREE.Object3D
+    private shipObject: THREE.Object3D
     private stats
     private activeView
 
     constructor(private mainInterfaceService: MainInterfaceService,
-                private gameStateService: GameStateService) {
+                private gameStateService: GameStateService,
+                private playerStateService: PlayerStateService) {
     }
 
     ngOnInit() {
@@ -43,34 +45,13 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
 
         // Load ship
         const loader = new THREE.VRMLLoader()
-        loader.load('assets/models/Blang.wrl', (scene: THREE.Scene) => {
-            if (!scene.children || scene.children.length <= 0) {
+        loader.load('assets/models/Blang.wrl', (shipScene: THREE.Scene) => {
+            if (!shipScene.children || shipScene.children.length <= 0) {
                 throw new Error('Could not load VRML model')
             }
 
             // Get the ship object from the parsed scene
-            this.ship = THREE.Object3D = scene.children[0]
-
-            // Turn the ship into a non-shaded mesh
-            const shipMesh: THREE.Mesh = <THREE.Mesh> this.ship.children[0]
-            shipMesh.material = new THREE.MeshBasicMaterial({
-                color: 0xEBEBEB,
-                polygonOffset: true,
-                polygonOffsetFactor: 1,
-                polygonOffsetUnits: 1
-            })
-
-            // Add a wireframe
-            const wireframeGeometry = new THREE.EdgesGeometry(shipMesh.geometry)
-            const wireframeMaterial = new THREE.LineBasicMaterial({color: 0x5A5A5A, linewidth: 2})
-            const wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial)
-            shipMesh.add(wireframe)
-
-            // FIXME: Hack to fix shapeWright models. Figure out the right way to correct rotation.
-            shipMesh.rotation.y = Math.PI / 2
-
-            this.ship.position.set(0, 500, 0)
-            this.scene.add(this.ship)
+            this.shipObject = shipScene.children[0]
         })
     }
 
@@ -109,9 +90,35 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
 
                 // Initialize the game view to the first system for now
                 // FIXME: Eventually we want to initialize where the player left off. Need to think about that.
-                this.activeView = new SystemView(this.scene, this.camera, gameState.galaxy.systems[0])
+                this.activeView = new SystemView(this.scene, this.camera, gameState.galaxy.systems[0], this.shipObject)
             }
         )
+
+        // Set up player state listener
+        this.playerStateService.playerStateUpdated.subscribe(
+            (playerState) => {
+                if (!playerState) {
+                    return
+                }
+
+                if (this.activeView) {
+                    this.activeView.clear()
+                }
+
+                if (playerState.activeViewName === 'system') {
+                    const activeSystem = this.gameStateService.getState().galaxy.systems[playerState.activeSystemIndex]
+                    this.activeView = new SystemView(this.scene, this.camera, activeSystem, this.shipObject)
+                } else if (playerState.activeSystemIndex === 'galaxy') {
+                    // FIXME: Draw galaxy
+                }
+            }
+        )
+    }
+
+    // See http://stackoverflow.com/a/20434960/1747491 and http://stackoverflow.com/a/35527852/1747491
+    @HostListener('window:resize', ['$event'])
+    onWindowResize(event) {
+        this.renderer.setSize(event.target.innerWidth, event.target.innerHeight)
     }
 
     animate() {
@@ -126,12 +133,6 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
         this.controls.update()
         this.stats.update()
         TWEEN.update()
-    }
-
-    // See http://stackoverflow.com/a/20434960/1747491 and http://stackoverflow.com/a/35527852/1747491
-    @HostListener('window:resize', ['$event'])
-    onWindowResize(event) {
-        this.renderer.setSize(event.target.innerWidth, event.target.innerHeight)
     }
 
     onDblClick(event) {
@@ -158,30 +159,30 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
 
             pointTween.start()
 
-            if (this.ship) {
+            if (this.shipObject) {
                 // Rotate ship towards and move to focused object
                 // See http://stackoverflow.com/a/25278875/1747491
                 // FIXME: Improve the rotation so that it doesn't have the silly "whipping" effect
 
                 // backup original rotation
-                const startRotation = new THREE.Euler().copy(this.ship.rotation)
+                const startRotation = new THREE.Euler().copy(this.shipObject.rotation)
 
                 // temporarily lookAt
-                this.ship.lookAt(focusedMesh.position)
-                const endRotation = new THREE.Euler().copy(this.ship.rotation)
+                this.shipObject.lookAt(focusedMesh.position)
+                const endRotation = new THREE.Euler().copy(this.shipObject.rotation)
 
                 // revert to original rotation
-                this.ship.rotation.copy(startRotation)
+                this.shipObject.rotation.copy(startRotation)
 
                 // Tween
-                const rotateTween = new TWEEN.Tween(this.ship.rotation).to({
+                const rotateTween = new TWEEN.Tween(this.shipObject.rotation).to({
                     x: endRotation.x,
                     y: endRotation.y,
                     z: endRotation.z
                 }, 750).start()
-                const moveTween = new TWEEN.Tween(this.ship.position).to({
+                const moveTween = new TWEEN.Tween(this.shipObject.position).to({
                     x: focusedMesh.position.x,
-                    y: this.ship.position.y,
+                    y: this.shipObject.position.y,
                     z: focusedMesh.position.z
                 }, 750)
 

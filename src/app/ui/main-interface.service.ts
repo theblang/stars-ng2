@@ -2,8 +2,10 @@ import { EventEmitter, Injectable } from '@angular/core'
 
 @Injectable()
 export class MainInterfaceService {
+
     public interfaceUpdated: EventEmitter<any> = new EventEmitter()
-    private state = {
+
+    private state: Object = {
         info: {},
         climate: {}
     }

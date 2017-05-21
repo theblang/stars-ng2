@@ -1,16 +1,14 @@
 import {EventEmitter, Injectable} from '@angular/core'
 import {AngularFireDatabase} from 'angularfire2/database'
-import {GameState} from './models/game-state'
-import {GeneratorService} from './generator.service'
+import {GameState} from '../models/game-state'
+import {GeneratorService} from '../misc/generator.service'
 
 @Injectable()
 export class GameStateService {
     public gameStateUpdated: EventEmitter<any> = new EventEmitter()
-    public gameState: any // FIXME: Define a game state model.
+    public state: GameState
 
     constructor(private db: AngularFireDatabase, private generatorService: GeneratorService) {
-        this.gameState = {} // FIXME: Can't we set default above in the declaration?
-
         const gameStateObservable = db.object('/game-state')
         gameStateObservable.subscribe((gameStateJson) => {
             if (!gameStateJson) {
@@ -18,9 +16,18 @@ export class GameStateService {
                 return
             }
 
-            this.gameState = new GameState(gameStateJson)
-            this.gameStateUpdated.emit(this.gameState)
+            this.state = new GameState(gameStateJson)
+            this.gameStateUpdated.emit(this.state)
         })
+    }
+
+    setState(state) {
+        this.state = state
+        this.gameStateUpdated.emit(this.state)
+    }
+
+    getState(): GameState {
+        return this.state || new GameState({})
     }
 
     // FIXME: Lock this function down to admins

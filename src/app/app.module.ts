@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { HttpModule } from '@angular/http'
 import { AppComponent } from './app.component'
-import { GeneratorService } from './generator.service'
+import { GeneratorService } from './misc/generator.service'
 import { MainCanvasComponent } from './canvases/main-canvas.component'
 import { MainInterfaceComponent } from './ui/main-interface.component'
 import { MainInterfaceService } from './ui/main-interface.service'
@@ -13,7 +13,8 @@ import { BrowserModule } from '@angular/platform-browser'
 import { AngularFireModule } from 'angularfire2'
 import { AngularFireDatabaseModule } from 'angularfire2/database'
 import { environment } from '../environments/environment'
-import { GameStateService } from './game-state.service'
+import { GameStateService } from './state/game-state.service'
+import {PlayerStateService} from './state/player-state.service'
 
 @NgModule({
     declarations: [
@@ -32,7 +33,7 @@ import { GameStateService } from './game-state.service'
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireDatabaseModule
     ],
-    providers: [GeneratorService, MainInterfaceService, GameStateService],
+    providers: [GeneratorService, MainInterfaceService, GameStateService, PlayerStateService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

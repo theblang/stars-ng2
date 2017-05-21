@@ -1,11 +1,14 @@
 import { Galaxy } from '../models/galaxy.model'
 import {ExtendedMesh} from '../models/extended-mesh.model'
 import {Interactive} from './interactive'
+import { Renderable } from './renderable'
 
 declare const THREE: any
 
 export class GalaxyView {
+
     private interactive: Interactive
+    private renderable: Renderable
 
     constructor(private scene: THREE.Scene,
                 private camera: THREE.Camera,
@@ -20,6 +23,10 @@ export class GalaxyView {
 
     public onDblClick(event: MouseEvent): ExtendedMesh {
         return this.interactive.shootRay(event.clientX, event.clientY)
+    }
+
+    public clear() {
+        this.renderable.clear()
     }
 
     private draw() {
@@ -48,12 +55,6 @@ export class GalaxyView {
 
         // Draw the systems
         for (const system of this.galaxy.systems) {
-        }
-    }
-
-    private clear() {
-        for (const child of this.scene.children) {
-            this.scene.remove(child)
         }
     }
 }

@@ -9,7 +9,7 @@ export class Interactive {
                 private camera: THREE.Camera) {
     }
 
-    shootRay(x, y): ExtendedMesh {
+    public shootRay(x, y): ExtendedMesh {
         const vector = new THREE.Vector3((x / window.innerWidth) * 2 - 1, -(y / window.innerHeight) * 2 + 1, 0.5)
         this.raycaster.setFromCamera(vector, this.camera) // http://stackoverflow.com/a/29373404/1747491
 

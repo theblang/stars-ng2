@@ -1,6 +1,6 @@
 <div id="views">
-    <button md-raised-button>System</button>
-    <button md-raised-button>Universe</button>
+    <button md-raised-button (click)="setActiveViewName('system')" [disabled]="getActiveViewName() === 'system'">System</button>
+    <button md-raised-button (click)="setActiveViewName('galaxy')" [disabled]="getActiveViewName() === 'galaxy'">Galaxy</button>
 </div>
 
 <div id="info" *ngIf="interfaceState.info">

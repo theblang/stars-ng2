@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core'
-import {Coords} from './models/coords.model'
-import {Moon} from './models/moon.model'
-import {Planet} from './models/planet.model'
-import {System} from './models/system.model'
-import {Galaxy} from './models/galaxy.model'
+import {Coords} from '../models/coords.model'
+import {Moon} from '../models/moon.model'
+import {Planet} from '../models/planet.model'
+import {System} from '../models/system.model'
+import {Galaxy} from '../models/galaxy.model'
 
 @Injectable()
 export class GeneratorService {

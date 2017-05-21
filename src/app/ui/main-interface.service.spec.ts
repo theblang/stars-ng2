@@ -1,15 +1,15 @@
-import { TestBed, inject } from '@angular/core/testing';
+import {TestBed, inject} from '@angular/core/testing'
 
-import { MainInterfaceService } from './main-interface.service';
+import {MainInterfaceService} from './main-interface.service'
 
 describe('MainInterfaceService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [MainInterfaceService]
-    });
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [MainInterfaceService]
+        })
+    })
 
-  it('should ...', inject([MainInterfaceService], (service: MainInterfaceService) => {
-    expect(service).toBeTruthy();
-  }));
-});
+    it('should ...', inject([MainInterfaceService], (service: MainInterfaceService) => {
+        expect(service).toBeTruthy()
+    }))
+})
