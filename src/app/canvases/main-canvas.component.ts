@@ -1,9 +1,9 @@
 import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core'
 import {Galaxy} from '../models/galaxy.model'
 import {SystemView} from '../canvas-views/system.view'
-import {InterfaceService} from '../interfaces/interface.service'
 import {ExtendedMesh} from '../models/extended-mesh.model'
 import {GameStateService} from '../game-state.service'
+import {MainInterfaceService} from '../ui/main-interface.service'
 
 declare const THREE: any
 declare const Stats: any
@@ -26,7 +26,7 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
     private stats
     private activeView
 
-    constructor(private interfaceService: InterfaceService,
+    constructor(private mainInterfaceService: MainInterfaceService,
                 private gameStateService: GameStateService) {
     }
 
@@ -190,10 +190,10 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
             }
 
             if (focusedMesh.object) {
-                this.interfaceService.setState(focusedMesh.object.getInterfaceState())
+                this.mainInterfaceService.setState(focusedMesh.object.getInterfaceState())
             }
         } else {
-            this.interfaceService.setState({})
+            this.mainInterfaceService.setState({})
         }
     }
 }

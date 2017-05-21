@@ -4,8 +4,8 @@ import { HttpModule } from '@angular/http'
 import { AppComponent } from './app.component'
 import { GeneratorService } from './generator.service'
 import { MainCanvasComponent } from './canvases/main-canvas.component'
-import { InterfaceComponent } from './interfaces/interface.component'
-import { InterfaceService } from './interfaces/interface.service'
+import { MainInterfaceComponent } from './ui/main-interface.component'
+import { MainInterfaceService } from './ui/main-interface.service'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { MdButtonModule, MdGridListModule, MdSliderModule } from '@angular/material'
 import 'hammerjs'
@@ -19,7 +19,7 @@ import { GameStateService } from './game-state.service'
     declarations: [
         AppComponent,
         MainCanvasComponent,
-        InterfaceComponent
+        MainInterfaceComponent
     ],
     imports: [
         BrowserModule,
@@ -32,7 +32,7 @@ import { GameStateService } from './game-state.service'
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireDatabaseModule
     ],
-    providers: [GeneratorService, InterfaceService, GameStateService],
+    providers: [GeneratorService, MainInterfaceService, GameStateService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

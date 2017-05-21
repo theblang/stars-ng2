@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InterfaceComponent } from './interface.component';
+import { MainInterfaceComponent } from './main-interface.component';
 
-describe('InterfaceComponent', () => {
-  let component: InterfaceComponent;
-  let fixture: ComponentFixture<InterfaceComponent>;
+describe('MainInterfaceComponent', () => {
+  let component: MainInterfaceComponent;
+  let fixture: ComponentFixture<MainInterfaceComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ InterfaceComponent ]
+      declarations: [ MainInterfaceComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InterfaceComponent);
+    fixture = TestBed.createComponent(MainInterfaceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

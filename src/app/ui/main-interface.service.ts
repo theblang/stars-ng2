@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core'
 
 @Injectable()
-export class InterfaceService {
+export class MainInterfaceService {
     public interfaceUpdated: EventEmitter<any> = new EventEmitter()
     private state = {
         info: {},
