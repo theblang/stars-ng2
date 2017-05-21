@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core'
 import {Galaxy} from '../models/galaxy.model'
-import {SystemView} from './system.view'
+import {SystemView} from '../canvas-views/system.view'
 import {InterfaceService} from '../interfaces/interface.service'
 import {ExtendedMesh} from '../models/extended-mesh.model'
 import {GameStateService} from '../game-state.service'

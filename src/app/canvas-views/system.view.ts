@@ -1,41 +1,50 @@
 import {System} from '../models/system.model'
 import {ExtendedMesh} from '../models/extended-mesh.model'
 import {Coords} from '../models/coords.model'
+import {Interactive} from './interactive'
 
 declare const THREE: any
 
 export class SystemView {
-    private static focusDistance = 150
-    private raycaster = new THREE.Raycaster()
+
+    private interactive: Interactive
+
+    private static getOrbitLine(distanceFromCenter: number, centerPosition: Coords) {
+        const geometry = new THREE.Geometry()
+        const material = new THREE.LineBasicMaterial({color: 0xFFFFFF, opacity: 0.8})
+        const resolution = 100
+        const size = 360 / resolution
+        let segment = null
+        for (let i = 0; i <= resolution; i++) {
+            segment = (i * size) * Math.PI / 180
+            geometry.vertices.push(new THREE.Vector3(Math.cos(segment) * distanceFromCenter,
+                0,
+                Math.sin(segment) * distanceFromCenter))
+        }
+
+        const line = new THREE.Line(geometry, material)
+
+        if (centerPosition) {
+            line.translateX(centerPosition.x)
+            line.translateY(centerPosition.y)
+            line.translateZ(centerPosition.z)
+        }
+
+        return line
+    }
 
     constructor(private scene: THREE.Scene,
                 private camera: THREE.Camera,
                 private system: System) {
+        this.interactive = new Interactive(this.scene, this.camera)
         this.draw()
     }
 
     public onDblClick(event: MouseEvent): ExtendedMesh {
-        const vector = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1, 0.5)
-        this.raycaster.setFromCamera(vector, this.camera) // http://stackoverflow.com/a/29373404/1747491
-
-        const intersects = this.raycaster.intersectObjects(this.scene.children)
-
-        if (intersects.length > 0) {
-            const intersectedMesh: ExtendedMesh = intersects[0].object
-
-            // compute the position of the new camera location
-            const A = new THREE.Vector3(this.camera.position.x, this.camera.position.y, this.camera.position.z)
-            const B = new THREE.Vector3(intersectedMesh.position.x, intersectedMesh.position.y, intersectedMesh.position.z)
-            const AB = new THREE.Vector3((B.x - A.x), (B.y - A.y), (B.z - A.z))
-            AB.normalize()
-
-            return intersectedMesh
-        } else {
-            return null
-        }
+        return this.interactive.shootRay(event.clientX, event.clientY)
     }
 
-    protected draw() {
+    private draw() {
         let geometry
         let material
         let mesh
@@ -70,7 +79,7 @@ export class SystemView {
             this.scene.add(mesh)
 
             // Planet's orbit
-            this.scene.add(this.getOrbitLine(planet.distanceFromSun, null))
+            this.scene.add(SystemView.getOrbitLine(planet.distanceFromSun, null))
 
             for (const moon of planet.moons) {
 
@@ -82,33 +91,9 @@ export class SystemView {
                 this.scene.add(mesh)
 
                 // Moon's orbit
-                this.scene.add(this.getOrbitLine(moon.distanceFromPlanet, planet.coords))
+                this.scene.add(SystemView.getOrbitLine(moon.distanceFromPlanet, planet.coords))
             }
         }
-    }
-
-    private getOrbitLine(distanceFromCenter: number, centerPosition: Coords) {
-        const geometry = new THREE.Geometry()
-        const material = new THREE.LineBasicMaterial({color: 0xFFFFFF, opacity: 0.8})
-        const resolution = 100
-        const size = 360 / resolution
-        let segment = null
-        for (let i = 0; i <= resolution; i++) {
-            segment = (i * size) * Math.PI / 180
-            geometry.vertices.push(new THREE.Vector3(Math.cos(segment) * distanceFromCenter,
-                0,
-                Math.sin(segment) * distanceFromCenter))
-        }
-
-        const line = new THREE.Line(geometry, material)
-
-        if (centerPosition) {
-            line.translateX(centerPosition.x)
-            line.translateY(centerPosition.y)
-            line.translateZ(centerPosition.z)
-        }
-
-        return line
     }
 
     private clear() {
