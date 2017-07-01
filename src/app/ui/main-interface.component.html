@@ -3,18 +3,18 @@
     <button md-raised-button (click)="setActiveViewName('galaxy')" [disabled]="getActiveViewName() === 'galaxy'">Galaxy</button>
 </div>
 
-<div id="info" *ngIf="interfaceState.info">
-    {{interfaceState.info.name}}
+<div id="info" *ngIf="mainInterfaceState.info">
+    {{mainInterfaceState.info.name}}
 </div>
 
-<div id="climate" *ngIf="interfaceState.climate">
+<div id="climate" *ngIf="mainInterfaceState.climate">
     <md-grid-list cols="2" rowHeight="50px">
         <md-grid-tile [colspan]="1" [rowspan]="1">
             <span>Gravity</span>
         </md-grid-tile>
         <md-grid-tile [colspan]="1" [rowspan]="1">
             <md-slider
-                [value]="interfaceState.climate.gravity"
+                [value]="mainInterfaceState.climate.gravity"
                 [disabled]="false"
                 [invert]="false"
                 [max]="100"
@@ -31,7 +31,7 @@
         </md-grid-tile>
         <md-grid-tile [colspan]="1" [rowspan]="1">
             <md-slider
-                [value]="interfaceState.climate.temperature"
+                [value]="mainInterfaceState.climate.temperature"
                 [disabled]="false"
                 [invert]="false"
                 [max]="100"
@@ -48,7 +48,7 @@
         </md-grid-tile>
         <md-grid-tile [colspan]="1" [rowspan]="1">
             <md-slider
-                [value]="interfaceState.climate.radiation"
+                [value]="mainInterfaceState.climate.radiation"
                 [disabled]="false"
                 [invert]="false"
                 [max]="100"

@@ -11,8 +11,8 @@ import { PlayerState } from '../models/player-state'
 })
 export class MainInterfaceComponent implements OnInit {
 
-    interfaceState = {}
-    playerState: PlayerState
+    private mainInterfaceState = {}
+    private playerState: PlayerState
 
     constructor(private mainInterfaceService: MainInterfaceService,
                 private gameStateService: GameStateService,
@@ -20,9 +20,9 @@ export class MainInterfaceComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.mainInterfaceService.interfaceUpdated.subscribe(
+        this.mainInterfaceService.mainInterfaceUpdated.subscribe(
             (state: Object) => {
-                this.interfaceState = state
+                this.mainInterfaceState = state
             }
         )
 
@@ -39,8 +39,10 @@ export class MainInterfaceComponent implements OnInit {
     }
 
     setActiveViewName(activeViewName: string) {
-        const newState = this.playerStateService.getState()
-        newState.activeViewName = activeViewName
-        this.playerStateService.playerStateUpdated.emit(newState)
+        const newPlayerState = this.playerStateService.getState()
+        newPlayerState.activeViewName = activeViewName
+        this.playerStateService.playerStateUpdated.emit(newPlayerState)
+
+        this.mainInterfaceService.mainInterfaceUpdated.emit({})
     }
 }

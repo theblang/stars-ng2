@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core'
-import { Galaxy } from '../models/galaxy.model'
 import { SystemView } from '../canvas-views/system.view'
 import { ExtendedMesh } from '../models/extended-mesh.model'
 import { GameStateService } from '../state/game-state.service'
@@ -137,7 +136,8 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
 
     onDblClick(event) {
         const focusedMesh: ExtendedMesh = this.activeView.onDblClick(event)
-        if (focusedMesh) {
+
+        if (focusedMesh && this.activeView instanceof SystemView) {
 
             // Point the camera towards the focused object
             const pointTween = new TWEEN.Tween(this.controls.target).to({
@@ -193,6 +193,7 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
             if (focusedMesh.object) {
                 this.mainInterfaceService.setState(focusedMesh.object.getInterfaceState())
             }
+        } else if (focusedMesh && this.activeView instanceof GalaxyView) {
         } else {
             this.mainInterfaceService.setState({})
         }
