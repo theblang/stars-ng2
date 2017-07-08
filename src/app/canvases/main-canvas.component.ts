@@ -199,6 +199,16 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
                 this.mainInterfaceService.setState(focusedMesh.object.getInterfaceState())
             }
         } else if (focusedMesh && this.activeView instanceof GalaxyView) {
+
+            new TWEEN.Tween(this.controls.target).to({
+                x: focusedMesh.position.x,
+                y: focusedMesh.position.y,
+                z: focusedMesh.position.z
+            }, 750).start()
+
+            if (focusedMesh.object) {
+                this.mainInterfaceService.setState(focusedMesh.object.getInterfaceState())
+            }
         } else {
             this.mainInterfaceService.setState({})
         }

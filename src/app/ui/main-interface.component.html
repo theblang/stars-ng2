@@ -62,3 +62,8 @@
     </md-grid-list>
 </div>
 
+<div id="system_stats" *ngIf="mainInterfaceState.system_stats">
+    <span>Planets: {{mainInterfaceState.system_stats.num_planets}}</span>
+    <span>Moons: {{mainInterfaceState.system_stats.num_moons}}</span>
+</div>
+

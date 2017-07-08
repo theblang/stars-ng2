@@ -16,4 +16,17 @@ export class System {
             this.planets.push(new Planet(planetJson))
         })
     }
+
+    public getInterfaceState() {
+        return {
+            info: {
+                name: this.name,
+                description: `This is system ${this.name}. It has ${this.planets.length} planets.`
+            },
+            system_stats: {
+                num_planets: this.planets.length,
+                num_moons: this.planets.reduce((sum, planet) => sum + planet.moons.length, 0)
+            }
+        }
+    }
 }

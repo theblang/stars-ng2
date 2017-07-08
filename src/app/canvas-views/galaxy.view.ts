@@ -50,7 +50,7 @@ export class GalaxyView {
         for (const system of this.galaxy.systems) {
             geometry = new THREE.TetrahedronGeometry(40, 0);
             material = new THREE.MeshBasicMaterial({color: 0xFFCC33, wireframe: true});
-            mesh = new THREE.Mesh(geometry, material)
+            mesh = new ExtendedMesh(geometry, material, system)
             mesh.position.set(system.coords.x, system.coords.y, system.coords.z);
             this.scene.add(mesh)
         }
