@@ -5,6 +5,7 @@ import { GameStateService } from '../state/game-state.service'
 import { MainInterfaceService } from '../ui/main-interface.service'
 import { PlayerStateService } from '../state/player-state.service'
 import { GalaxyView } from '../canvas-views/galaxy.view'
+import { PlayerState } from '../models/player-state'
 
 declare const THREE: any
 declare const Stats: any
@@ -25,6 +26,7 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
     private shipObject: THREE.Object3D
     private stats
     private activeView
+    private cachedPlayerState: PlayerState = new PlayerState({})
 
     constructor(private mainInterfaceService: MainInterfaceService,
                 private gameStateService: GameStateService,
@@ -95,13 +97,14 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
 
         // Set up player state listener
         this.playerStateService.playerStateUpdated.subscribe(
-            (playerState) => {
+            (playerState: PlayerState) => {
                 if (!playerState) {
                     return
                 }
 
-                if (this.activeView) {
+                if (this.cachedPlayerState.activeViewName !== playerState.activeViewName) {
                     this.activeView.clear()
+                    this.controls.reset() // https://stackoverflow.com/a/29991405/1747491
                 }
 
                 if (playerState.activeViewName === 'system') {
@@ -110,6 +113,8 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
                 } else if (playerState.activeViewName === 'galaxy') {
                     this.activeView = new GalaxyView(this.scene, this.camera, this.gameStateService.getState().galaxy)
                 }
+
+                this.cachedPlayerState = playerState
             }
         )
     }

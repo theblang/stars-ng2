@@ -12,7 +12,7 @@ import { PlayerState } from '../models/player-state'
 export class MainInterfaceComponent implements OnInit {
 
     private mainInterfaceState = {}
-    private playerState: PlayerState
+    private playerState: PlayerState = new PlayerState({})
 
     constructor(private mainInterfaceService: MainInterfaceService,
                 private gameStateService: GameStateService,
@@ -40,9 +40,10 @@ export class MainInterfaceComponent implements OnInit {
 
     setActiveViewName(activeViewName: string) {
         const newPlayerState = this.playerStateService.getState()
-        newPlayerState.activeViewName = activeViewName
-        this.playerStateService.playerStateUpdated.emit(newPlayerState)
 
+        newPlayerState.activeViewName = activeViewName
+
+        this.playerStateService.playerStateUpdated.emit(newPlayerState)
         this.mainInterfaceService.mainInterfaceUpdated.emit({})
     }
 }
