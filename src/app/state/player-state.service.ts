@@ -1,26 +1,21 @@
-import {EventEmitter, Injectable} from '@angular/core'
+import { EventEmitter, Injectable } from '@angular/core'
 import { PlayerState } from '../models/player-state'
+import { Subject } from 'rxjs/Subject'
+import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 
 @Injectable()
 export class PlayerStateService {
-    public playerStateUpdated: EventEmitter<any> = new EventEmitter()
-    private state: Object
+    public state: BehaviorSubject<PlayerState>
 
     constructor() {
+        const playerStateJson = window.localStorage.getItem('/player-state')
+        this.state = new BehaviorSubject<PlayerState>(PlayerState.fromJson(playerStateJson || {}))
     }
 
-    setState(state: PlayerState) {
-        this.state = state
-        window.localStorage.setItem('/player-state', JSON.stringify(this.state))
-        this.playerStateUpdated.emit(this.state)
-    }
+    setState(playerState: PlayerState) {
+        this.state.next(playerState)
 
-    getState(): PlayerState {
         // FIXME: Using localStorage for now until we decide on backend persistence model
-        const playerStateJson = window.localStorage.getItem('/player-state') || {
-                activeViewName: 'system',
-                activeSystemIndex: 0
-            }
-        return new PlayerState(playerStateJson)
+        window.localStorage.setItem('/player-state', JSON.stringify(playerState))
     }
 }

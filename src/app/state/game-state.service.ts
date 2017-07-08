@@ -1,33 +1,28 @@
-import {EventEmitter, Injectable} from '@angular/core'
-import {AngularFireDatabase} from 'angularfire2/database'
-import {GameState} from '../models/game-state'
-import {GeneratorService} from '../misc/generator.service'
+import { Injectable } from '@angular/core'
+import { AngularFireDatabase } from 'angularfire2/database'
+import { GameState } from '../models/game-state'
+import { GeneratorService } from '../misc/generator.service'
+import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 
 @Injectable()
 export class GameStateService {
-    public gameStateUpdated: EventEmitter<any> = new EventEmitter()
-    public state: GameState
+    public state: BehaviorSubject<GameState>
 
     constructor(private db: AngularFireDatabase, private generatorService: GeneratorService) {
-        const gameStateObservable = db.object('/game-state')
-        gameStateObservable.subscribe((gameStateJson) => {
+        db.object('/game-state').subscribe((gameStateJson) => {
             if (!gameStateJson) {
                 console.error('Game state is missing or corrupt')
                 return
             }
 
-            this.state = new GameState(gameStateJson)
-            this.gameStateUpdated.emit(this.state)
+            this.setState(new GameState(gameStateJson))
         })
+
+        this.state = new BehaviorSubject(null)
     }
 
-    setState(state) {
-        this.state = state
-        this.gameStateUpdated.emit(this.state)
-    }
-
-    getState(): GameState {
-        return this.state || new GameState({})
+    setState(state: GameState) {
+        this.state.next(state)
     }
 
     // FIXME: Lock this function down to admins

@@ -61,5 +61,5 @@
     "component": {
     }
   },
-  "packageManager": "yarn"
+  "packageManager": "npm"
 }

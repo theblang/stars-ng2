@@ -6,6 +6,8 @@ import { MainInterfaceService } from '../ui/main-interface.service'
 import { PlayerStateService } from '../state/player-state.service'
 import { GalaxyView } from '../canvas-views/galaxy.view'
 import { PlayerState } from '../models/player-state'
+import { Observable } from 'rxjs/Rx'
+import { GameState } from '../models/game-state'
 
 declare const THREE: any
 declare const Stats: any
@@ -26,7 +28,7 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
     private shipObject: THREE.Object3D
     private stats
     private activeView
-    private cachedPlayerState: PlayerState = new PlayerState({})
+    private cachedPlayerState: PlayerState = new PlayerState()
 
     constructor(private mainInterfaceService: MainInterfaceService,
                 private gameStateService: GameStateService,
@@ -78,7 +80,7 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
         this.animate()
 
         // Set up game state listener
-        this.gameStateService.gameStateUpdated.subscribe(
+        this.gameStateService.state.subscribe(
             (gameState) => {
                 if (!gameState || !gameState.galaxy) {
                     return
@@ -90,15 +92,19 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
                 }
 
                 // Initialize the game view to the first system for now
-                // FIXME: Eventually we want to initialize where the player left off. Need to think about that.
                 this.activeView = new SystemView(this.scene, this.camera, gameState.galaxy.systems[0], this.shipObject)
             }
         )
 
-        // Set up player state listener
-        this.playerStateService.playerStateUpdated.subscribe(
-            (playerState: PlayerState) => {
-                if (!playerState) {
+        // Begin listening for updates to the game or player state
+        Observable
+            .combineLatest(this.gameStateService.state, this.playerStateService.state, (gameState, playerState) => [gameState, playerState])
+            .subscribe((states) => {
+                const gameState: GameState = <GameState> states[0]
+                const playerState: PlayerState = <PlayerState> states[1]
+
+                // Ensure both game state and player state is loaded
+                if (!gameState || !playerState) {
                     return
                 }
 
@@ -108,15 +114,14 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
                 }
 
                 if (playerState.activeViewName === 'system') {
-                    const activeSystem = this.gameStateService.getState().galaxy.systems[playerState.activeSystemIndex]
+                    const activeSystem = gameState.galaxy.systems[playerState.activeSystemIndex]
                     this.activeView = new SystemView(this.scene, this.camera, activeSystem, this.shipObject)
                 } else if (playerState.activeViewName === 'galaxy') {
-                    this.activeView = new GalaxyView(this.scene, this.camera, this.gameStateService.getState().galaxy)
+                    this.activeView = new GalaxyView(this.scene, this.camera, gameState.galaxy)
                 }
 
                 this.cachedPlayerState = playerState
-            }
-        )
+            })
     }
 
     // See http://stackoverflow.com/a/20434960/1747491 and http://stackoverflow.com/a/35527852/1747491
@@ -142,7 +147,16 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
     onDblClick(event) {
         const focusedMesh: ExtendedMesh = this.activeView.onDblClick(event)
 
-        if (focusedMesh && this.activeView instanceof SystemView) {
+        if (!focusedMesh) {
+            this.mainInterfaceService.setState({})
+            return
+        }
+
+        if (focusedMesh.object) {
+            this.mainInterfaceService.setState(focusedMesh.object.getInterfaceState())
+        }
+
+        if (this.activeView instanceof SystemView) {
 
             // Point the camera towards the focused object
             const pointTween = new TWEEN.Tween(this.controls.target).to({
@@ -194,23 +208,13 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
                 rotateTween.chain(moveTween)
                 rotateTween.start()
             }
-
-            if (focusedMesh.object) {
-                this.mainInterfaceService.setState(focusedMesh.object.getInterfaceState())
-            }
-        } else if (focusedMesh && this.activeView instanceof GalaxyView) {
+        } else if (this.activeView instanceof GalaxyView) {
 
             new TWEEN.Tween(this.controls.target).to({
                 x: focusedMesh.position.x,
                 y: focusedMesh.position.y,
                 z: focusedMesh.position.z
             }, 750).start()
-
-            if (focusedMesh.object) {
-                this.mainInterfaceService.setState(focusedMesh.object.getInterfaceState())
-            }
-        } else {
-            this.mainInterfaceService.setState({})
         }
     }
 }

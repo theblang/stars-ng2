@@ -12,7 +12,7 @@ import { PlayerState } from '../models/player-state'
 export class MainInterfaceComponent implements OnInit {
 
     private mainInterfaceState = {}
-    private playerState: PlayerState = new PlayerState({})
+    private playerState: PlayerState = new PlayerState()
 
     constructor(private mainInterfaceService: MainInterfaceService,
                 private gameStateService: GameStateService,
@@ -26,10 +26,9 @@ export class MainInterfaceComponent implements OnInit {
             }
         )
 
-        this.playerState = this.playerStateService.getState()
-        this.playerStateService.playerStateUpdated.subscribe(
-            (state: Object) => {
-                this.playerState = new PlayerState(state)
+        this.playerStateService.state.subscribe(
+            (state: PlayerState) => {
+                this.playerState = state
             }
         )
     }
@@ -39,11 +38,9 @@ export class MainInterfaceComponent implements OnInit {
     }
 
     setActiveViewName(activeViewName: string) {
-        const newPlayerState = this.playerStateService.getState()
-
+        const newPlayerState = this.playerStateService.state.getValue()
         newPlayerState.activeViewName = activeViewName
-
-        this.playerStateService.playerStateUpdated.emit(newPlayerState)
+        this.playerStateService.setState(newPlayerState)
         this.mainInterfaceService.mainInterfaceUpdated.emit({})
     }
 }
