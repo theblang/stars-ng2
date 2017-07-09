@@ -96,7 +96,7 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
             }
         )
 
-        // Begin listening for updates to the game or player state
+        // Set up player state listener and short-circuit if game state is not yet loaded
         Observable
             .combineLatest(this.gameStateService.state, this.playerStateService.state, (gameState, playerState) => [gameState, playerState])
             .subscribe((states) => {
@@ -108,6 +108,7 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
                     return
                 }
 
+                // Only clear if the view is changing
                 if (this.cachedPlayerState.activeViewName !== playerState.activeViewName) {
                     this.activeView.clear()
                     this.controls.reset() // https://stackoverflow.com/a/29991405/1747491
@@ -118,6 +119,9 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
                     this.activeView = new SystemView(this.scene, this.camera, activeSystem, this.shipObject)
                 } else if (playerState.activeViewName === 'galaxy') {
                     this.activeView = new GalaxyView(this.scene, this.camera, gameState.galaxy)
+
+                    const activeSystem = gameState.galaxy.systems[playerState.activeSystemIndex]
+                    this.controls.target.set(activeSystem.coords.x, activeSystem.coords.y, activeSystem.coords.z)
                 }
 
                 this.cachedPlayerState = new PlayerState(playerState.activeViewName, playerState.activeSystemIndex)
