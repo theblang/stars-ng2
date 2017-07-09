@@ -120,7 +120,7 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
                     this.activeView = new GalaxyView(this.scene, this.camera, gameState.galaxy)
                 }
 
-                this.cachedPlayerState = playerState
+                this.cachedPlayerState = new PlayerState(playerState.activeViewName, playerState.activeSystemIndex)
             })
     }
 
