@@ -22,7 +22,7 @@
         "styles.css"
       ],
       "scripts": [
-        "../node_modules/tween.js/src/Tween.js",
+        "../node_modules/@tweenjs/tween.js/src/Tween.js",
         "../node_modules/three/build/three.js",
         "../node_modules/stats.js/build/stats.min.js",
         "../vendor/VRMLLoader.js",
