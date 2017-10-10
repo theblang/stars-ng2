@@ -14,24 +14,28 @@ import { AngularFireModule } from 'angularfire2'
 import { AngularFireDatabaseModule } from 'angularfire2/database'
 import { environment } from '../environments/environment'
 import { GameStateService } from './state/game-state.service'
-import {PlayerStateService} from './state/player-state.service'
+import { PlayerStateService } from './state/player-state.service'
+import { ContextMenuModule } from 'primeng/primeng'
+import { ContextMenuComponent } from './ui/context-menu.component'
 
 @NgModule({
     declarations: [
         AppComponent,
         MainCanvasComponent,
-        MainInterfaceComponent
+        MainInterfaceComponent,
+        ContextMenuComponent
     ],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
         FormsModule,
         HttpModule,
+        AngularFireModule.initializeApp(environment.firebase),
+        AngularFireDatabaseModule,
         MdSliderModule,
         MdGridListModule,
         MdButtonModule,
-        AngularFireModule.initializeApp(environment.firebase),
-        AngularFireDatabaseModule
+        ContextMenuModule
     ],
     providers: [GeneratorService, MainInterfaceService, GameStateService, PlayerStateService],
     bootstrap: [AppComponent]

@@ -221,4 +221,9 @@ export class MainCanvasComponent implements OnInit, AfterViewInit {
             }, 750).start()
         }
     }
+
+    onRightClick(event) {
+
+    }
+
 }
