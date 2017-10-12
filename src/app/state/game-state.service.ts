@@ -9,7 +9,7 @@ export class GameStateService {
     public state: BehaviorSubject<GameState>
 
     constructor(private db: AngularFireDatabase, private generatorService: GeneratorService) {
-        db.object('/game-state').subscribe((gameStateJson) => {
+        db.object('/game-state').valueChanges().subscribe((gameStateJson) => {
             if (!gameStateJson) {
                 console.error('Game state is missing or corrupt')
                 return

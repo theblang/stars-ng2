@@ -1,6 +1,6 @@
 <div id="views">
-    <button md-raised-button (click)="setActiveViewName('system')" [disabled]="getActiveViewName() === 'system'">System</button>
-    <button md-raised-button (click)="setActiveViewName('galaxy')" [disabled]="getActiveViewName() === 'galaxy'">Galaxy</button>
+    <button mat-raised-button (click)="setActiveViewName('system')" [disabled]="getActiveViewName() === 'system'">System</button>
+    <button mat-raised-button (click)="setActiveViewName('galaxy')" [disabled]="getActiveViewName() === 'galaxy'">Galaxy</button>
 </div>
 
 <div id="info" *ngIf="mainInterfaceState.info">
@@ -8,12 +8,12 @@
 </div>
 
 <div id="climate" *ngIf="mainInterfaceState.climate">
-    <md-grid-list cols="2" rowHeight="50px">
-        <md-grid-tile [colspan]="1" [rowspan]="1">
+    <mat-grid-list cols="2" rowHeight="50px">
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
             <span>Gravity</span>
-        </md-grid-tile>
-        <md-grid-tile [colspan]="1" [rowspan]="1">
-            <md-slider
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <mat-slider
                 [value]="mainInterfaceState.climate.gravity"
                 [disabled]="false"
                 [invert]="false"
@@ -23,14 +23,14 @@
                 [thumb-label]="false"
                 [tick-interval]="null"
                 [vertical]="false">
-            </md-slider>
-        </md-grid-tile>
+            </mat-slider>
+        </mat-grid-tile>
 
-        <md-grid-tile [colspan]="1" [rowspan]="1">
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
             <span>Temperature</span>
-        </md-grid-tile>
-        <md-grid-tile [colspan]="1" [rowspan]="1">
-            <md-slider
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <mat-slider
                 [value]="mainInterfaceState.climate.temperature"
                 [disabled]="false"
                 [invert]="false"
@@ -40,14 +40,14 @@
                 [thumb-label]="false"
                 [tick-interval]="null"
                 [vertical]="false">
-            </md-slider>
-        </md-grid-tile>
+            </mat-slider>
+        </mat-grid-tile>
 
-        <md-grid-tile [colspan]="1" [rowspan]="1">
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
             <span>Radiation</span>
-        </md-grid-tile>
-        <md-grid-tile [colspan]="1" [rowspan]="1">
-            <md-slider
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <mat-slider
                 [value]="mainInterfaceState.climate.radiation"
                 [disabled]="false"
                 [invert]="false"
@@ -57,9 +57,9 @@
                 [thumb-label]="false"
                 [tick-interval]="null"
                 [vertical]="false">
-            </md-slider>
-        </md-grid-tile>
-    </md-grid-list>
+            </mat-slider>
+        </mat-grid-tile>
+    </mat-grid-list>
 </div>
 
 <div id="system_stats" *ngIf="mainInterfaceState.system_stats">

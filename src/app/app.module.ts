@@ -7,7 +7,7 @@ import { MainCanvasComponent } from './canvases/main-canvas.component'
 import { MainInterfaceComponent } from './ui/main-interface.component'
 import { MainInterfaceService } from './ui/main-interface.service'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { MdButtonModule, MdGridListModule, MdSliderModule } from '@angular/material'
+import { MatButtonModule, MatGridListModule, MatSliderModule } from '@angular/material'
 import 'hammerjs'
 import { BrowserModule } from '@angular/platform-browser'
 import { AngularFireModule } from 'angularfire2'
@@ -32,9 +32,9 @@ import { ContextMenuComponent } from './ui/context-menu.component'
         HttpModule,
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireDatabaseModule,
-        MdSliderModule,
-        MdGridListModule,
-        MdButtonModule,
+        MatSliderModule,
+        MatGridListModule,
+        MatButtonModule,
         ContextMenuModule
     ],
     providers: [GeneratorService, MainInterfaceService, GameStateService, PlayerStateService],
